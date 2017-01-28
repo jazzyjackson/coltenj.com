@@ -1,0 +1,49 @@
+<body>
+</body>
+<style>
+  body {
+    overflow: hidden;
+  }
+  img {
+    transition: all 1s;
+  }
+</style>
+<script>
+function newImage(){
+  var url = `https://raw.githubusercontent.com/jazzyjackson/coltenj.com/master/img/${myRandom(0,25)}.PNG`;
+  var width = myRandom(200,800)
+  var posX = myRandom(0, screen.width - width)
+  var posY = myRandom(0, screen.height)
+  var imgString = `<img src=${url} width=${width} style="position: absolute; left: ${posX}; top: ${posY}"/>`
+  var tempNode = document.createElement('div');
+  tempNode.innerHTML = imgString;
+  tempNode.firstChild.addEventListener('mouseover', event => destroyGracefully(event.target));
+  tempNode.firstChild.addEventListener('touchmove', event => destroyGracefully(event.target));
+  document.body.appendChild(tempNode.firstChild);
+  if(document.body.childNodes.length > 25) document.querySelector('img').remove();
+  return "Attached something";
+}
+  
+function destroyGracefully(imgElement){
+  imgElement.style.zIndex = 1;
+  imgElement.style.left = 0;
+  imgElement.style.width = '100%';
+  imgElement.style.top = (screen.height / 2) - (imgElement.getBoundingClientRect().height / 2);
+  imgElement.style.opacity = 0;
+  setTimeout(()=>imgElement.remove(), 1000)
+  
+}
+
+function myRandom(min,max){
+	var range = max - min;
+    var numString = min + Math.ceil(Math.random() * range)
+    return (numString < 10) ? "0" + numString : numString;
+}
+  
+for(var i = 0; i < 25; i++){
+  newImage();
+}
+  
+setInterval(newImage, 150)
+
+</script>
