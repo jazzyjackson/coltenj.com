@@ -3,14 +3,23 @@
 <style>
   body {
     overflow: hidden;
+    background: linear-gradient( to right ,
+        rgba(255, 0, 0, 1) 0%,
+        rgba(255, 255, 0, 1) 15%,
+        rgba(0, 255, 0, 1) 30%,
+        rgba(0, 255, 255, 1) 50%,
+        rgba(0, 0, 255, 1) 65%,
+        rgba(255, 0, 255, 1) 80%,
+        rgba(255, 0, 0, 1) 100%);
   }
   img {
     transition: all 1s;
+    opacity: 1;
   }
 </style>
 <script>
-function newImage(){
-  var url = `https://raw.githubusercontent.com/jazzyjackson/coltenj.com/master/img/${myRandom(0,25)}.PNG`;
+function newImage(imageIndex){
+  var url = `/img/${imageIndex}.PNG`;
   var width = myRandom(200,800)
   var posX = myRandom(0, screen.width - width)
   var posY = myRandom(0, screen.height)
@@ -20,30 +29,46 @@ function newImage(){
   tempNode.firstChild.addEventListener('mouseover', event => destroyGracefully(event.target));
   tempNode.firstChild.addEventListener('touchmove', event => destroyGracefully(event.target));
   document.body.appendChild(tempNode.firstChild);
-  if(document.body.childNodes.length > 25) document.querySelector('img').remove();
   return "Attached something";
 }
+
   
 function destroyGracefully(imgElement){
-  imgElement.style.zIndex = 1;
+  imgElement.style.transition = "all 1s"
+  imgElement.style.zIndex = Number(imgElement.style.zIndex) > 9999 ? 0 : Number(imgElement.style.zIndex) + 1;
   imgElement.style.left = 0;
   imgElement.style.width = '100%';
   imgElement.style.top = (screen.height / 2) - (imgElement.getBoundingClientRect().height / 2);
   imgElement.style.opacity = 0;
-  setTimeout(()=>imgElement.remove(), 1000)
+  setTimeout(()=>{
+    imgElement.style.zIndex = Number(imgElement.style.zIndex) + 1;
+    imgElement.style.transition = "all 0s"
+    imgElement.style.width = myRandom(200,800);
+    imgElement.style.left = myRandom(0, screen.width);
+    imgElement.style.top = myRandom(0, screen.height);
+    imgElement.style.opacity = 1;
+  }, 1000)
   
 }
 
 function myRandom(min,max){
 	var range = max - min;
-    var numString = min + Math.ceil(Math.random() * range)
-    return (numString < 10) ? "0" + numString : numString;
+    return min + Math.ceil(Math.random() * range)
 }
   
-for(var i = 0; i < 25; i++){
-  newImage();
+for(var i = 1; i <= 25; i++){
+  let numString = (i < 10) ? "0" + i : i;
+  newImage(numString);
 }
   
-setInterval(newImage, 150)
+setInterval(()=>{
+	let randomImg = document.getElementsByTagName('img')[myRandom(0,25) - 1];
+    if(randomImg.style.opacity = 1){
+      randomImg.style.transition = "all 0s"
+      randomImg.style.width = myRandom(200,800)
+      randomImg.style.left = myRandom(0, screen.width - randomImg.style.width)
+      randomImg.style.top = myRandom(0, screen.height)
+    }
+}, 150)
 
 </script>
