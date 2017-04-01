@@ -1,0 +1,44 @@
+<html>
+  <head>
+  </head>
+  <body style="position: relative">
+    <video autoplay="true" loop="true" src="http://coltenj.com/img/030greenbriar.mp4" style="width: 100%;"></video>
+   <script>
+      var lastX = 0;
+      var lastY = 0;
+
+      document.body.onmousemove = function(event){
+        var nextX = event.clientX;
+        var nextY = event.clientY;
+        let thisOnesSize = 50
+        nextX = Math.floor(nextX / thisOnesSize) * thisOnesSize
+        nextY = Math.floor(nextY / thisOnesSize) * thisOnesSize
+        if(nextX != lastX){
+          console.log('something horizontal happened')
+          lastX = nextX
+        }
+        if(nextY != lastY){
+          console.log('something vertical happened')
+          let newTag = generateTag(event.clientX, event.clientY, Math.random() * 20);
+          document.body.appendChild(newTag)
+          setTimeout(()=>{
+            newTag.remove()
+          }, 550)
+          lastY = nextY
+        }
+
+      }
+
+      function generateTag(x,y,fontsize){
+        var tempDiv = document.createElement('div')
+        tempDiv.innerHTML = 
+        `<div style="position: absolute; left: ${x}; top: ${y};font-size: ${fontsize + 20}px; font-family: Sans-serif; color: white; text-shadow: 0px 0px 5px black;">${pickAnErrorAnyError()}</div>`
+        return tempDiv.firstChild
+      }
+      function pickAnErrorAnyError(){
+        let errors = ["Couldn't sign in", "Authentication failed", "Check your connection and try again", "Content was last updated 4 days ago", "Waiting for usable network", "Host is not communicating for more than 15 seconds. Still waiting...", "Can't search", "Data connection lost", "ERR_INTERNET_DISCONNECTED","¡Sin internet!","¡Sin internet!"]
+        return errors[Math.floor(Math.random() * errors.length)]
+      }
+    </script>
+    </body>
+</html>
